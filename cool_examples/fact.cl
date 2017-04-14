@@ -18,4 +18,16 @@ class Main inherits A2I {
                         i * fact(i-1)
                 fi
         };
+
+        fact_iterative(i: Int) : Int {
+                let fact: Int <- 1 in {
+                        while (not (i = 0)) loop
+                         {
+                                fact <- fact * i;
+                                i <- i - 1;
+                        } pool;
+                fact;
+                }
+        };
+
 };
