@@ -141,3 +141,30 @@ extern IdTable idtable;
 extern IntTable inttable;
 extern StrTable stringtable;
 #endif
+
+/*
+Notes on String tables
+An important point about the structure of the Cool compiler is that there are actually three distinct
+string tables: 
+- one for string constants (stringtable)
+- one for integer constants (inttable), and 
+- one for identifiers (idtable)
+ 
+ each table has a different element type (StrEntry, IntEntry, and IdEntry), each of which is
+a derived class of Entry
+- a pointer to an Entry is called a Symbol, irrespective of whether the symbol represents 
+an integer, string, or identifier
+- comparing whether two IntEntrys, StrEntrys,
+or IdEntrys x and y represent the same string can be done simply by comparing the two pointers x == y
+
+3 methods:
+ Entry add_string(char *s,int max_length)
+ Entry add_string(char *s)
+ Entry add_int(int i) (converts integer i to a string and adds the string to the table)
+
+ Entry.get_string() is defined for extracting entry's str. 
+ Read docs in string_tab.h
+
+ utilities.h and utilities.cc define a few functions useful in writing and debugging a Cool
+ parser and lexical analyzer. See the source code for documentation.
+*/
