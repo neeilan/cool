@@ -50,6 +50,15 @@ extern YYSTYPE cool_yylval;
  */
 
 DARROW          =>
+KEYWORD         "if"
+COMPARISON      ==
+ASSIGNMENT      =
+DARROW          =>
+TRUE            true
+FALSE           false
+INTEGER         [0-9]+
+TYPEID          ([A-Z]+)[A-Za-z0-9_]*
+OBJID           ([a-z]+)[A-Za-z0-9_]*
 
 %%
 
@@ -62,6 +71,14 @@ DARROW          =>
   *  The multiple-character operators.
   */
 {DARROW}		{ return (DARROW); }
+
+/*
+{DIGIT} {
+    cool_yylval.symbol = inttable.add_string(yytext);
+    return DIGIT_TOKEN;
+}
+*/
+
 
  /*
   * Keywords are case-insensitive except for the values true and false,
@@ -76,5 +93,14 @@ DARROW          =>
   *
   */
 
+    {KEYWORD}		{ printf("%s", "(keyword)"); }
+    {DARROW}		{ printf("%s", "loosename"); }
+    {TRUE}		    { printf("%s", "(bool, true)"); }
+    {FALSE}		    { printf("%s", "(bool, false)"); }
+    {INTEGER}		{ printf("%s", "(integer)"); }
+    {TYPEID}		{ printf("%s", "(type identifier)"); }
+    {OBJID}		    { printf("%s", "(obj identifier)"); }
+    {COMPARISON}	{ printf("%s", "(COMPARISON)"); }
+    {ASSIGNMENT}    { printf("%s", "(ASSIGNMENT)"); }
 
 %%
