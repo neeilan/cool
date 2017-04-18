@@ -53,7 +53,6 @@ DARROW          =>
 KEYWORD         "if"
 COMPARISON      ==
 ASSIGNMENT      =
-DARROW          =>
 TRUE            true
 FALSE           false
 INTEGER         [0-9]+
