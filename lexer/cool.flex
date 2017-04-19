@@ -92,14 +92,42 @@ OBJID           ([a-z]+)[A-Za-z0-9_]*
   *
   */
 
-    {KEYWORD}		{ printf("%s", "(keyword)"); }
-    {DARROW}		{ printf("%s", "loosename"); }
-    {TRUE}		    { printf("%s", "(bool, true)"); }
-    {FALSE}		    { printf("%s", "(bool, false)"); }
-    {INTEGER}		{ printf("%s", "(integer)"); }
-    {TYPEID}		{ printf("%s", "(type identifier)"); }
-    {OBJID}		    { printf("%s", "(obj identifier)"); }
-    {COMPARISON}	{ printf("%s", "(COMPARISON)"); }
-    {ASSIGNMENT}    { printf("%s", "(ASSIGNMENT)"); }
+    {KEYWORD}		{ 
+                        printf("%s", "(keyword)");
+                    }
+
+    {DARROW}		{ 
+                        printf("%s", "loosename"); 
+                    }
+
+    {TRUE}		    { 
+                        printf("%s", "(bool, true)"); 
+                    }
+
+    {FALSE}		    { 
+                        printf("%s", "(bool, false)"); 
+                    }
+
+    {INTEGER}		{ 
+                        printf("%s", "(integer)");
+                        return INT_CONST; 
+                    }
+
+    {TYPEID}		{ 
+                        printf("%s", "(type identifier)");
+                        return TYPEID; 
+                    }
+
+    {OBJID}		    { 
+                        printf("%s", "(obj identifier)"); 
+                    }
+
+    {COMPARISON}	{ 
+                        printf("%s", "(COMPARISON)"); 
+                    }
+
+    {ASSIGNMENT}    { 
+                        printf("%s", "(ASSIGNMENT)"); 
+                    }
 
 %%
