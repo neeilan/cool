@@ -51,10 +51,13 @@ extern YYSTYPE cool_yylval;
 
 DARROW          =>
 COMPARISON      ==
-ASSIGNMENT      =
+ASSIGNMENT      <-
+LET             <=
 INTEGER         [0-9]+
 TYPEID          ([A-Z]+)[A-Za-z0-9_]*
 OBJID           ([a-z]+)[A-Za-z0-9_]*
+WHITESPACE      " "|\t|\f|\r|\v
+SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
 
 /*
  * Keywords - true/false are case sensitive
@@ -106,26 +109,34 @@ TRUE            true
   * which must begin with a lower-case letter.
   */
 
-    CLASS       { return CLASS; }                  
-    ELSE        { return ELSE; }          
-    FI          { return FI; }      
-    IF          { return IF; }       
-    IN          { return IN; }       
-    INHERITS    { return INHERITS; }    	    
-    ISVOID	    { return ISVOID; }    	    
-    LET         { return LET; }
-    LOOP        { return LOOP; }        
-    POOL        { return POOL; }       
-    THEN	    { return THEN; }    	  
-    WHILE	    { return WHILE; }    	    
-    CASE	    { return CASE; }    	  
-    ESAC	    { return ESAC; }    	    
-    OF          { return OF; }      
-    NEW		    { return NEW; }    	    
-    ISVOID	    { return ISVOID; }    	    
-    NOT		    { return NOT; }
-    FALSE       { return BOOL_CONST; }    	    
-    TRUE        { return BOOL_CONST; }
+    {CLASS}     { return CLASS; }                  
+    {ELSE}      { return ELSE; }          
+    {FI}        { return FI; }      
+    {IF}        { return IF; }       
+    {IN}        { return IN; }       
+    {INHERITS}  { return INHERITS; }    	    
+    {ISVOID}    { return ISVOID; }    	    
+    {LET}       { return LET; }
+    {LOOP}      { return LOOP; }        
+    {POOL}      { return POOL; }       
+    {THEN}	    { return THEN; }    	  
+    {WHILE}	    { return WHILE; }    	    
+    {CASE}	    { return CASE; }    	  
+    {ESAC}	    { return ESAC; }    	    
+    {OF}        { return OF; }      
+    {NEW}	    { return NEW; }    	    
+    {ISVOID}	{ return ISVOID; }    	    
+    {NOT}	    { return NOT; }
+
+    {FALSE}     { 
+                    cool_yylval.boolean = 0;
+                    return BOOL_CONST; 
+                }    	
+
+    {TRUE}      {
+                    cool_yylval.boolean = 1;
+                    return BOOL_CONST;    
+                }
 
 
 
@@ -135,6 +146,9 @@ TRUE            true
   *  \n \t \b \f, the result is c.
   *
   */
+
+
+  /* Error handling */
 
 
 %%
