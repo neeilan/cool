@@ -106,8 +106,27 @@ TRUE            true
   * which must begin with a lower-case letter.
   */
 
+    CLASS       { return CLASS; }                  
+    ELSE        { return ELSE; }          
+    FI          { return FI; }      
+    IF          { return IF; }       
+    IN          { return IN; }       
+    INHERITS    { return INHERITS; }    	    
+    ISVOID	    { return ISVOID; }    	    
+    LET         { return LET; }
+    LOOP        { return LOOP; }        
+    POOL        { return POOL; }       
+    THEN	    { return THEN; }    	  
+    WHILE	    { return WHILE; }    	    
+    CASE	    { return CASE; }    	  
+    ESAC	    { return ESAC; }    	    
+    OF          { return OF; }      
+    NEW		    { return NEW; }    	    
+    ISVOID	    { return ISVOID; }    	    
+    NOT		    { return NOT; }
+    FALSE       { return BOOL_CONST; }    	    
+    TRUE        { return BOOL_CONST; }
 
-  {}
 
 
  /*
