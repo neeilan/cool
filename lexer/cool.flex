@@ -50,14 +50,36 @@ extern YYSTYPE cool_yylval;
  */
 
 DARROW          =>
-KEYWORD         "if"
 COMPARISON      ==
 ASSIGNMENT      =
-TRUE            true
-FALSE           false
 INTEGER         [0-9]+
 TYPEID          ([A-Z]+)[A-Za-z0-9_]*
 OBJID           ([a-z]+)[A-Za-z0-9_]*
+
+/*
+ * Keywords - true/false are case sensitive
+ */
+CLASS           (c|C)(l|L)(a|A)(s|S)(s|S)
+ELSE            (e|E)(l|L)(s|S)(e|E)
+FALSE           false
+FI              (f|F)(i|I)
+IF              (i|I)(f|F)
+IN              (i|I)(n|N)
+INHERITS	    (i|I)(n|N)(h|H)(e|E)(r|R)(i|I)(t|T)(s|S)
+ISVOID		    (i|I)(s|S)(v|V)(o|O)(i|I)(d|D)
+LET			    (l|L)(e|E)(t|T)
+LOOP            (l|L)(o|O)(o|O)(p|P)
+POOL            (p|P)(o|O)(o|O)(l|L)
+THEN		    (t|T)(h|H)(e|E)(n|N)
+WHILE		    (e|W)(h|H)(i|I)(l|L)(e|E)
+CASE		    (c|C)(a|A)(s|S)(e|E)
+ESAC		    (e|E)(s|S)(a|A)(c|C)
+OF              (o|O)(f|F)
+NEW			    (n|N)(e|E)(w|W)
+ISVOID		    (i|I)(s|S)(v|V)(o|O)(i|I)(d|D)
+NOT			    (n|N)(o|O)(t|T)
+TRUE            true
+
 
 %%
 
@@ -85,6 +107,9 @@ OBJID           ([a-z]+)[A-Za-z0-9_]*
   */
 
 
+  {}
+
+
  /*
   *  String constants (C syntax)
   *  Escape sequence \c is accepted for all characters c. Except for 
@@ -92,42 +117,5 @@ OBJID           ([a-z]+)[A-Za-z0-9_]*
   *
   */
 
-    {KEYWORD}		{ 
-                        printf("%s", "(keyword)");
-                    }
-
-    {DARROW}		{ 
-                        printf("%s", "loosename"); 
-                    }
-
-    {TRUE}		    { 
-                        printf("%s", "(bool, true)"); 
-                    }
-
-    {FALSE}		    { 
-                        printf("%s", "(bool, false)"); 
-                    }
-
-    {INTEGER}		{ 
-                        printf("%s", "(integer)");
-                        return INT_CONST; 
-                    }
-
-    {TYPEID}		{ 
-                        printf("%s", "(type identifier)");
-                        return TYPEID; 
-                    }
-
-    {OBJID}		    { 
-                        printf("%s", "(obj identifier)"); 
-                    }
-
-    {COMPARISON}	{ 
-                        printf("%s", "(COMPARISON)"); 
-                    }
-
-    {ASSIGNMENT}    { 
-                        printf("%s", "(ASSIGNMENT)"); 
-                    }
 
 %%
