@@ -43,6 +43,8 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 
+ #define REPORT_ERROR(msg) { cool_yylval.error_msg = msg; return ERROR; }
+
 %}
 
 /*
@@ -52,12 +54,19 @@ extern YYSTYPE cool_yylval;
 DARROW          =>
 COMPARISON      ==
 ASSIGNMENT      <-
-LET             <=
+LE             <=
 INTEGER         [0-9]+
-TYPEID          ([A-Z]+)[A-Za-z0-9_]*
-OBJID           ([a-z]+)[A-Za-z0-9_]*
+TYPEID          ([A-Z])[A-Za-z0-9_]*
+OBJID           ([a-z])[A-Za-z0-9_]*
 WHITESPACE      " "|\t|\f|\r|\v
 SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
+MATCHALL        .
+
+QUOTATION       \"
+SLCOMMENT       --([^\n\0])*
+STARTCOMMENT    \(\*
+ENDCOMMENT      \*\)
+
 
 /*
  * Keywords - true/false are case sensitive
@@ -149,6 +158,6 @@ TRUE            true
 
 
   /* Error handling */
-
+  {MATCHALL}      { REPORT_ERROR(yytext); }
 
 %%
