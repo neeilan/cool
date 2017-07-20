@@ -28,8 +28,8 @@ extern FILE *fin; /* we read from this file */
  */
 #undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
-	if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
-		YY_FATAL_ERROR( "read() in flex scanner failed");
+    if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
+        YY_FATAL_ERROR( "read() in flex scanner failed");
 
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
 char *string_buf_ptr;
@@ -61,7 +61,7 @@ OBJID           ([a-z])[A-Za-z0-9_]*
 WHITESPACE      " "|\t|\f|\r|\v
 SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
 MATCHALL        .
-QUOTATION       \"
+QUOTE          \"
 SLCOMMENT       --([^\n\0])*
 STARTCOMMENT    \(\*
 ENDCOMMENT      \*\)
@@ -154,6 +154,25 @@ return DIGIT_TOKEN;
 *  \n \t \b \f, the result is c.
 *
 */
+<INITIAL>{QUOTE}    
+    {
+        BEGIN(STR);
+    }
+
+<STR>{QUOTE}    
+    {
+        BEGIN(INITIAL);
+    }
+
+<INITIAL>{START_COMMENT}
+    {
+        BEGIN(COMMENT);
+    }
+
+<COMMENT>{END_COMMENT}
+    {
+        BEGIN(INITIAL);
+    }
 
 
 /* Error handling */
