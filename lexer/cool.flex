@@ -54,14 +54,13 @@ extern YYSTYPE cool_yylval;
 DARROW          =>
 COMPARISON      ==
 ASSIGNMENT      <-
-LE             <=
+LE              <=
 INTEGER         [0-9]+
 TYPEID          ([A-Z])[A-Za-z0-9_]*
 OBJID           ([a-z])[A-Za-z0-9_]*
 WHITESPACE      " "|\t|\f|\r|\v
 SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
 MATCHALL        .
-
 QUOTATION       \"
 SLCOMMENT       --([^\n\0])*
 STARTCOMMENT    \(\*
@@ -77,19 +76,19 @@ ELSE            ?i:else
 FI              ?i:fi
 IF              ?i:if
 IN              ?i:in
-INHERITS	    ?i:inherits
-ISVOID		    ?i:isvoid
-LET			    ?i:let
+INHERITS	?i:inherits
+ISVOID		?i:isvoid
+LET		?i:let
 LOOP            ?i:loop
 POOL            ?i:pool
-THEN		    ?i:then
-WHILE		    ?i:while
-CASE		    ?i:case
-ESAC		    ?i:esac
+THEN		?i:then
+WHILE		?i:while
+CASE		?i:case
+ESAC		?i:esac
 OF              ?i:of
-NEW			    ?i:new
-ISVOID		    ?i:isvoid
-NOT			    ?i:not
+NEW		?i:new
+ISVOID		?i:isvoid
+NOT		?i:not
 
 FALSE           f(?i:alse)
 TRUE            t(?i:rue)
