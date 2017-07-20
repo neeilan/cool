@@ -69,95 +69,95 @@ ENDCOMMENT      \*\)
 
 
 /*
- * Keywords - true/false are case sensitive
- */
-CLASS           ?i:"class"
-ELSE            ?i:"else"
-FI              ?i:"fi"
-IF              ?i:"if"
-IN              ?i:"in"
-INHERITS	    ?i:"inherits"
-ISVOID		    ?i:"isvoid"
-LET			    ?i:"let"
-LOOP            ?i:"loop"
-POOL            ?i:"pool"
-THEN		    ?i:"then"
-WHILE		    ?i:"while"
-CASE		    ?i:"case"
-ESAC		    ?i:"esac"
-OF              ?i:"of"
-NEW			    ?i:"new"
-ISVOID		    ?i:"isvoid"
-NOT			    ?i:"not"
+* Keywords are case-insensitive except for the values true and false,
+* which must begin with a lower-case letter.
+*/
+CLASS           ?i:class
+ELSE            ?i:else
+FI              ?i:fi
+IF              ?i:if
+IN              ?i:in
+INHERITS	    ?i:inherits
+ISVOID		    ?i:isvoid
+LET			    ?i:let
+LOOP            ?i:loop
+POOL            ?i:pool
+THEN		    ?i:then
+WHILE		    ?i:while
+CASE		    ?i:case
+ESAC		    ?i:esac
+OF              ?i:of
+NEW			    ?i:new
+ISVOID		    ?i:isvoid
+NOT			    ?i:not
 
-FALSE           false
-TRUE            true
+FALSE           f(?i:alse)
+TRUE            t(?i:rue)
 
 %%
 
- /*
-  *  Nested comments
-  */
+/*
+*  Nested comments
+*/
 
 
- /*
-  *  The multiple-character operators.
-  */
+/*
+*  The multiple-character operators.
+*/
 {DARROW}		{ return (DARROW); }
 
 /*
 {DIGIT} {
-    cool_yylval.symbol = inttable.add_string(yytext);
-    return DIGIT_TOKEN;
+cool_yylval.symbol = inttable.add_string(yytext);
+return DIGIT_TOKEN;
 }
 */
 
 
- /*
-  * Keywords are case-insensitive except for the values true and false,
-  * which must begin with a lower-case letter.
-  */
+/*
+* KEYWORDS
+*/
 
-    {CLASS}     { return CLASS; }                  
-    {ELSE}      { return ELSE; }          
-    {FI}        { return FI; }      
-    {IF}        { return IF; }       
-    {IN}        { return IN; }       
-    {INHERITS}  { return INHERITS; }    	    
-    {ISVOID}    { return ISVOID; }    	    
-    {LET}       { return LET; }
-    {LOOP}      { return LOOP; }        
-    {POOL}      { return POOL; }       
-    {THEN}	    { return THEN; }    	  
-    {WHILE}	    { return WHILE; }    	    
-    {CASE}	    { return CASE; }    	  
-    {ESAC}	    { return ESAC; }    	    
-    {OF}        { return OF; }      
-    {NEW}	    { return NEW; }    	    
-    {ISVOID}	{ return ISVOID; }    	    
-    {NOT}	    { return NOT; }
+{CLASS}     { return CLASS; }                  
+{ELSE}      { return ELSE; }          
+{FI}        { return FI; }      
+{IF}        { return IF; }       
+{IN}        { return IN; }       
+{INHERITS}  { return INHERITS; }    	    
+{ISVOID}    { return ISVOID; }    	    
+{LET}       { return LET; }
+{LOOP}      { return LOOP; }        
+{POOL}      { return POOL; }       
+{THEN}	    { return THEN; }    	  
+{WHILE}	    { return WHILE; }    	    
+{CASE}	    { return CASE; }    	  
+{ESAC}	    { return ESAC; }    	    
+{OF}        { return OF; }      
+{NEW}	    { return NEW; }    	    
+{ISVOID}	{ return ISVOID; }    	    
+{NOT}	    { return NOT; }
 
-    {FALSE}     { 
-                    cool_yylval.boolean = 0;
-                    return BOOL_CONST; 
-                }    	
+{FALSE}     { 
+                cool_yylval.boolean = 0;
+                return BOOL_CONST; 
+            }    	
 
-    {TRUE}      {
-                    cool_yylval.boolean = 1;
-                    return BOOL_CONST;    
-                }
-
+{TRUE}      {
+                cool_yylval.boolean = 1;
+                return BOOL_CONST;    
+            }
 
 
- /*
-  *  String constants (C syntax)
-  *  Escape sequence \c is accepted for all characters c. Except for 
-  *  \n \t \b \f, the result is c.
-  *
-  */
+
+/*
+*  String constants (C syntax)
+*  Escape sequence \c is accepted for all characters c. Except for 
+*  \n \t \b \f, the result is c.
+*
+*/
 
 
-  /* Error handling */
-  {MATCHALL}      { REPORT_ERROR(yytext); }
+/* Error handling */
+{MATCHALL}      { REPORT_ERROR(yytext); }
 
 %%
