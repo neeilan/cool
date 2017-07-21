@@ -59,6 +59,7 @@ INTEGER         [0-9]+
 TYPEID          ([A-Z])[A-Za-z0-9_]*
 OBJID           ([a-z])[A-Za-z0-9_]*
 WHITESPACE      " "|\t|\f|\r|\v
+NEWLINE         \n
 SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
 MATCHALL        .
 QUOTE          \"
@@ -146,6 +147,10 @@ return DIGIT_TOKEN;
                 return BOOL_CONST;    
             }
 
+{NEWLINE}   {
+                curr_lineno++;
+            }
+
 
 
 /*
@@ -162,6 +167,11 @@ return DIGIT_TOKEN;
 <STR>{QUOTE}    
     {
         BEGIN(INITIAL);
+    }
+
+<STR><<EOF>>
+    {
+        REPORT_ERROR("EOF in string");
     }
 
 <INITIAL>{START_COMMENT}
