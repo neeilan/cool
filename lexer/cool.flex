@@ -44,6 +44,7 @@ extern YYSTYPE cool_yylval;
  */
 
  #define REPORT_ERROR(msg) { cool_yylval.error_msg = msg; return ERROR; }
+ int comment_depth = 0;
 
 %}
 
@@ -100,6 +101,17 @@ TRUE            t(?i:rue)
 *  Nested comments
 */
 
+<INITIAL>{START_COMMENT}
+    {
+        comment_depth++;
+        BEGIN(COMMENT);
+    }
+
+<COMMENT>{END_COMMENT}
+    {
+        if (--comment_depth == 0)
+            BEGIN(INITIAL);
+    }
 
 /*
 *  The multiple-character operators.
@@ -151,6 +163,9 @@ return DIGIT_TOKEN;
                 curr_lineno++;
             }
 
+{OBJID}     { 
+                return OBJID;
+            }
 
 
 /*
@@ -174,15 +189,6 @@ return DIGIT_TOKEN;
         REPORT_ERROR("EOF in string");
     }
 
-<INITIAL>{START_COMMENT}
-    {
-        BEGIN(COMMENT);
-    }
-
-<COMMENT>{END_COMMENT}
-    {
-        BEGIN(INITIAL);
-    }
 
 
 /* Error handling */
