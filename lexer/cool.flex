@@ -48,6 +48,9 @@ extern YYSTYPE cool_yylval;
 
 %}
 
+ /* Declare start conditions */
+%s COMMENT STR
+
 /*
  * Define names for regular expressions here.
  */
@@ -56,6 +59,7 @@ DARROW          =>
 COMPARISON      ==
 ASSIGNMENT      <-
 LE              <=
+DIGIT		[0-9]
 INTEGER         [0-9]+
 TYPEID          ([A-Z])[A-Za-z0-9_]*
 OBJID           ([a-z])[A-Za-z0-9_]*
@@ -67,8 +71,6 @@ QUOTE          \"
 SLCOMMENT       --([^\n\0])*
 STARTCOMMENT    \(\*
 ENDCOMMENT      \*\)
-
-
 /*
 * Keywords are case-insensitive except for the values true and false,
 * which must begin with a lower-case letter.
@@ -89,47 +91,32 @@ CASE		?i:case
 ESAC		?i:esac
 OF              ?i:of
 NEW		?i:new
-ISVOID		?i:isvoid
 NOT		?i:not
-
 FALSE           f(?i:alse)
 TRUE            t(?i:rue)
-
 %%
 
-/*
-*  Nested comments
-*/
-
-<INITIAL>{START_COMMENT}
-    {
-        comment_depth++;
-        BEGIN(COMMENT);
-    }
-
-<COMMENT>{END_COMMENT}
-    {
-        if (--comment_depth == 0)
-            BEGIN(INITIAL);
-    }
-
-/*
-*  The multiple-character operators.
-*/
-{DARROW}		{ return (DARROW); }
-
-/*
-{DIGIT} {
-cool_yylval.symbol = inttable.add_string(yytext);
-return DIGIT_TOKEN;
+	/* Nested comments */
+<INITIAL>{STARTCOMMENT}
+{
+    comment_depth++;
+    BEGIN(COMMENT);
 }
-*/
 
+<COMMENT>{ENDCOMMENT}
+{
+	comment_depth--;
+	/* if (comment_depth == 0) BEGIN(INITIAL); */
+}
 
-/*
-* KEYWORDS
-*/
+	/* The multiple-character operators. */
+{DARROW}		{ return (DARROW); }
+{INTEGER} {
+	cool_yylval.symbol = inttable.add_string(yytext);
+	return INT_CONST;
+}
 
+	/* KEYWORDS */
 {CLASS}     { return CLASS; }                  
 {ELSE}      { return ELSE; }          
 {FI}        { return FI; }      
@@ -148,50 +135,39 @@ return DIGIT_TOKEN;
 {NEW}	    { return NEW; }    	    
 {ISVOID}	{ return ISVOID; }    	    
 {NOT}	    { return NOT; }
-
 {FALSE}     { 
                 cool_yylval.boolean = 0;
                 return BOOL_CONST; 
             }    	
-
 {TRUE}      {
                 cool_yylval.boolean = 1;
                 return BOOL_CONST;    
             }
-
 {NEWLINE}   {
                 curr_lineno++;
             }
-
 {OBJID}     { 
-                return OBJID;
+                return OBJECTID;
             }
-
-
-/*
-*  String constants (C syntax)
-*  Escape sequence \c is accepted for all characters c. Except for 
-*  \n \t \b \f, the result is c.
-*
-*/
+	/*
+	*  String constants (C syntax)
+	*  Escape sequence \c is accepted for all characters c. Except for 
+	*  \n \t \b \f, the result is c.
+	*
+	*/
 <INITIAL>{QUOTE}    
     {
         BEGIN(STR);
     }
-
 <STR>{QUOTE}    
     {
         BEGIN(INITIAL);
     }
-
 <STR><<EOF>>
     {
         REPORT_ERROR("EOF in string");
     }
 
-
-
-/* Error handling */
+	/* Error handling */
 {MATCHALL}      { REPORT_ERROR(yytext); }
-
 %%
