@@ -7,6 +7,7 @@
  *  output, so headers and global definitions are placed here to be visible
  * to the code in the file.  Don't remove anything that was here initially
  */
+
 %{
 #include <cool-parse.h>
 #include <stringtab.h>
@@ -65,7 +66,7 @@ TYPEID          ([A-Z])[A-Za-z0-9_]*
 OBJID           ([a-z])[A-Za-z0-9_]*
 WHITESPACE      " "|\t|\f|\r|\v
 NEWLINE         \n
-SINGLECHAROP    "("|")"|"@"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
+SINGLECHAROP    "("|")"|"@"|"{"|"}"|"["|"]"|"+"|"-"|"*"|"/"|"<"|"="|">"|"."|"~"|","|";"|":"
 MATCHALL        .
 QUOTE          \"
 SLCOMMENT       --([^\n\0])*
@@ -133,7 +134,7 @@ TRUE            t(?i:rue)
 {ESAC}	    { return ESAC; }    	    
 {OF}        { return OF; }      
 {NEW}	    { return NEW; }    	    
-{ISVOID}	{ return ISVOID; }    	    
+{ISVOID}    { return ISVOID; }    	    
 {NOT}	    { return NOT; }
 {FALSE}     { 
                 cool_yylval.boolean = 0;
@@ -146,7 +147,14 @@ TRUE            t(?i:rue)
 {NEWLINE}   {
                 curr_lineno++;
             }
+
+{TYPEID}    {
+		cool_yylval.symbol = idtable.add_string(yytext);
+		return TYPEID;
+	    }
+
 {OBJID}     { 
+		cool_yylval.symbol = idtable.add_string(yytext);
                 return OBJECTID;
             }
 	/*
@@ -159,15 +167,24 @@ TRUE            t(?i:rue)
     {
         BEGIN(STR);
     }
+
 <STR>{QUOTE}    
     {
         BEGIN(INITIAL);
     }
+
 <STR><<EOF>>
     {
         REPORT_ERROR("EOF in string");
     }
 
+<STR>{MATCHALL}
+    {
+	
+    }
+
 	/* Error handling */
+<INITIAL>{SINGLECHAROP}	{ return int(yytext[0]); }
+<INITIAL>{WHITESPACE}	{}
 {MATCHALL}      { REPORT_ERROR(yytext); }
 %%
